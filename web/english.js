@@ -21,7 +21,7 @@ form.addEventListener("submit", (event) => {
 });
 
 function escapeHtml(str) {
-return String(str)
+  return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
@@ -56,14 +56,14 @@ function saveWords() {
 
 function renderWords() {
   list.innerHTML = "";
-  
-  words.forEach((wordItem, index) => {
+
+  words.forEach((wordItem) => {
     let item = document.createElement("li");
     item.classList.add("dict-item");
-    
+
     let textSpan = document.createElement("span");
     textSpan.textContent = escapeHtml(wordItem.word) + " - " + escapeHtml(wordItem.translate);
-    
+
     let deleteBtn = document.createElement("button");
     deleteBtn.classList.add("dict-item__delete");
     deleteBtn.innerHTML = `<svg
@@ -82,14 +82,16 @@ function renderWords() {
         <path d="M14 11v6" />
         <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
     </svg>`;
-    
+
+    // Используем id вместо index для удаления слова
     deleteBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        words.splice(index, 1);
-        saveWords();
-        renderWords();
+      e.stopPropagation();
+      // Фильтруем массив, оставляя только слова с id, не равным удаляемому
+      words = words.filter(word => word.id !== wordItem.id);
+      saveWords();
+      renderWords();
     });
-    
+
     item.append(textSpan, deleteBtn);
     list.appendChild(item);
   });
