@@ -1,11 +1,11 @@
-const btnDict = document.querySelector(".btn-french");
-const dict = document.querySelector(".dict-french");
-const btnClose = document.querySelector(".btn-close-french");
+const btnDict = document.querySelector(".btn-german");
+const dict = document.querySelector(".dict-german");
+const btnClose = document.querySelector(".btn-close-german");
 const form = document.querySelector(".dict-form");
 const inputs = document.querySelectorAll(".dict-input");
-const list = document.querySelector(".dict-list-french");
+const list = document.querySelector(".dict-list-german");
 
-let words = JSON.parse(localStorage.getItem('frenchWords')) || [];
+let words = JSON.parse(localStorage.getItem('germanWords')) || [];
 
 btnDict.addEventListener("click", () => {
     dict.style.display = "block";
@@ -32,7 +32,7 @@ function addWord() {
     let translate = inputs[1].value.trim();
     
     if (word === "" || translate === "") {
-        alert("Введите слово и перевод");
+        alert("Geben Sie ein Wort und seine Übersetzung ein");
         return;
     }
     
@@ -51,13 +51,13 @@ function addWord() {
 }
 
 function saveWords() {
-    localStorage.setItem('frenchWords', JSON.stringify(words));
+    localStorage.setItem('germanWords', JSON.stringify(words));
 }
 
 function renderWords() {
     list.innerHTML = "";
     
-    words.forEach((wordItem, index) => {
+    words.forEach((wordItem) => {
         let item = document.createElement("li");
         item.classList.add("dict-item");
         
@@ -83,9 +83,11 @@ function renderWords() {
             <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
         </svg>`;
         
+        // Используем id вместо index для удаления слова
         deleteBtn.addEventListener("click", (e) => {
             e.stopPropagation();
-            words.splice(index, 1);
+            // Фильтруем массив, оставляя только слова с id, не равным удаляемому
+            words = words.filter(word => word.id !== wordItem.id);
             saveWords();
             renderWords();
         });
@@ -95,4 +97,5 @@ function renderWords() {
     });
 }
 
+// Загружаем слова при загрузке страницы
 renderWords();
